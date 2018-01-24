@@ -1,44 +1,110 @@
-Welcome to the AWS CodeStar sample web service
-==============================================
+Get live data from **Indira Gandhi International Airport, Delhi, India.** Information is being scraped from [their official website](https://www.newdelhiairport.in/live-flight-information.aspx)
 
-This sample code helps get you started with a simple Express web service
-deployed by AWS CloudFormation to AWS Lambda and Amazon API Gateway.
+# Request Object
 
-What's Here
------------
+To retrieve flight information you must specify an object with the following properties (and values) :
 
-This sample includes:
+1. `type` : "A" (_arrival_) or "D"(_departure_).
+2. `way`: "I" (_international_) or "D" (_domestic_)
+3. `num` : Flight Number (_space allowed_)
+4. `place` : Place of arrival or departure (_spaces allowed_)
 
-* README.md - this file
-* buildspec.yml - this file is used by AWS CodeBuild to package your
-  service for deployment to AWS Lambda
-* app.js - this file contains the sample Node.js code for the web service
-* index.js - this file contains the AWS Lambda handler code
-* template.yml - this file contains the AWS Serverless Application Model (AWS SAM) used
-  by AWS CloudFormation to deploy your service to AWS Lambda and Amazon API
-  Gateway.
+It's simple to use; the more properties you specify, the finer the data gets.
 
+# Response Object
 
-What Do I Do Next?
-------------------
+The request **returns a Promise**. The data is a JS object with the following format:
 
-If you have checked out a local copy of your repository you can start making
-changes to the sample code.  We suggest making a small change to app.js first,
-so you can see how changes pushed to your project's repository are automatically
-picked up by your project pipeline and deployed to AWS Lambda and Amazon API Gateway.
-(You can watch the pipeline progress on your AWS CodeStar project dashboard.)
-Once you've seen how that works, start developing your own code, and have fun!
+```
+{
+  "request": {
+    "flight_number": "value of num in the request object sent",
+    "flight_place": "value of place in the request object sent",
+    "flight_type": "value of type in the request object sent",
+    "flight_way": "value of way in the request object sent",
+    "timestamp": "Timestanp of the moment when request was sent to the the airport",
+    "url": "URL of the request sent to the the airport"
+  },
+  "response": [
+    {
+      "estimated_date": "Proposed date of arrival or departure",
+      "estimated_time": "Proposed date of arrival or departure",
+      "flight_no": "Flight Number 1",
+      "place": "Source or Destination",
+      "scheduled_date": "Scheduled date of arrival or departure",
+      "scheduled_time": "Scheduled date of arrival or departure",
+      "status": "Status of flight : On-time, Delayed",
+      "terminal": "Terminal code",
+      "via": "Stoppage airports"
+    },
+    {
+      "estimated_date": "Proposed date of arrival or departure",
+      "estimated_time": "Proposed date of arrival or departure",
+      "flight_no": "Flight Number 2",
+      "place": "Source or Destination",
+      "scheduled_date": "Scheduled date of arrival or departure",
+      "scheduled_time": "Scheduled date of arrival or departure",
+      "status": "Status of flight : On-time, Delayed",
+      "terminal": "Terminal code",
+      "via": "Stoppage airports"
+    },
+    ...
+  ]
+}
+```
 
-Learn more about AWS Serverless Application Model (AWS SAM) and how it works here:
-https://github.com/awslabs/serverless-application-model/blob/master/HOWTO.md
+# Examples
 
-AWS Lambda Developer Guide:
-http://docs.aws.amazon.com/lambda/latest/dg/deploying-lambda-apps.html
+`const delhiAirportLive = require("delhi-flight-live")`;
 
-Learn more about AWS CodeStar by reading the user guide, and post questions and
-comments about AWS CodeStar on our forum.
+#### 1\. Fetching all arrivals
 
-AWS CodeStar User Guide:
-http://docs.aws.amazon.com/codestar/latest/userguide/welcome.html
+```
+delhiAirportLive({ type: "A" })
+  .then(function(data) {
+    console.log(data);
+  })
+  .catch(function(err) {
+    console.error(err);
+  });
+```
 
-AWS CodeStar Forum: https://forums.aws.amazon.com/forum.jspa?forumID=248
+#### 2\. Fetching all domestic departures
+
+```
+delhiAirportLive({ type: "D", way: "D" })
+  .then(function(data) {
+    console.log(data);
+  })
+  .catch(function(err) {
+    console.error(err);
+  });
+```
+
+#### 3\. Fetching all arrivals from and departures to Bangkok
+
+```
+Promise.all([
+  delhiAirportLive({ type: "A", place: "Bangkok" }),
+  delhiAirportLive({ type: "D", place: "Bangkok" })
+])
+  .then(function(data) {
+    let arrivals = data[0];
+    let departures = data[1];
+  })
+  .catch(function(err) {
+    console.error(err);
+  });
+```
+
+#### 4\. Fetching info about a particular flight
+
+```
+delhiAirportLive({ num: "D7 182" })
+  .then(function(data) {
+    console.log(data);
+  })
+  .catch(function(err) {
+    console.error(err);
+  });
+```

@@ -1,10 +1,19 @@
 {
-    "name": "express-HelloWorld",
-    "description": "Hello World ExpressJS WebService",
-    "version": "0.0.1",
-    "private": true,
-    "dependencies": {
-        "express": "latest",
-        "aws-serverless-express": "latest"
-    }
+  "name": "delhi-flight-live",
+  "version": "1.0.1",
+  "description": "Get live flight info from Delhi International Airport, India",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "keywords": ["delhi", "airport", "flights", "info", "live-flights"],
+  "author": "hotessy (https://github.com/hotessy)",
+  "license": "ISC",
+  "readme": "README.md",
+  "dependencies": {
+    "lodash": "^4.17.4",
+    "request": "^2.83.0",
+    "request-promise": "^4.2.2",
+    "tabletojson": "^0.6.0"
+  }
 }
