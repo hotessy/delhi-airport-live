@@ -1,4 +1,5 @@
 const Helper = require("./Helper");
+const Promise = require("bluebird");
 
 class Options {
   constructor(type, way, num, place) {
@@ -29,6 +30,22 @@ class Options {
   }
 }
 
-module.exports = function(type, way, num, place) {
-  return Helper.getFlightData(new Options(type, way, num, place).requestObject);
+module.exports = function(options) {
+  // check type and way for allowed values
+
+  let type = options.hasOwnProperty("type") ? [options.type] : ["A", "D"];
+  let way = options.hasOwnProperty("way") ? [options.way] : ["I", "D"];
+  let num = options.hasOwnProperty("num") ? options.num : "";
+  let place = options.hasOwnProperty("place") ? options.place : "";
+
+  options = [];
+  for (let t of type) {
+    for (let w of way) {
+      options.push(new Options(t, w, num, place).requestObject);
+    }
+  }
+
+  return Promise.map(options, function(option) {
+    return Helper.getFlightData(option);
+  });
 };

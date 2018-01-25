@@ -21,7 +21,16 @@ exports.getFlightData = function(options) {
         });
       })
       .catch(function(err) {
-        reject("Data not fetched", err);
+        if (err) reject(err);
+        else {
+          create_response_object([], options, datetime, function(
+            err,
+            response_object
+          ) {
+            if (err) reject(err);
+            else resolve(response_object);
+          });
+        }
       });
   });
 };
@@ -37,6 +46,10 @@ function create_response_object(data, options, datetime, callback) {
   };
 
   var response = [];
+  if (!data || !data.length) {
+    var response_object = { request: request, response: response };
+    callback(null, response_object);
+  }
 
   for (let i = 0; i < data.length; i++) {
     let obj = {};
