@@ -16,7 +16,7 @@ const delhiAirportLive = require("./index");
 //     console.error(err);
 //   });
 
-delhiAirportLive({ type: "D", way: "D" })
+delhiAirportLive({ type: "F", way: "D" })
   .then(function(data) {
     console.log(JSON.stringify(data));
   })

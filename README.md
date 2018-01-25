@@ -1,5 +1,9 @@
 Get live data from **Indira Gandhi International Airport, Delhi, India.** Information is being scraped from [their official website](https://www.newdelhiairport.in/live-flight-information.aspx)
 
+Also available as an [npm package](https://www.npmjs.com/package/delhi-flight-live):
+`npm install --save delhi-flight-live`
+
+
 # Request Object
 
 To retrieve flight information you must specify an object with the following properties (and values) :

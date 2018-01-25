@@ -1,18 +1,16 @@
 {
   "name": "delhi-flight-live",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Get live flight info from Delhi International Airport, India",
   "main": "index.js",
   "scripts": {
     "test": "node test.js"
   },
-  "keywords": [
-    "delhi",
-    "airport",
-    "flights",
-    "info",
-    "live-flights"
-  ],
+  "keywords": ["delhi", "airport", "flights", "info", "live-flights"],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hotessy/delhi-airport-live.git"
+  },
   "author": "hotessy (https://github.com/hotessy)",
   "license": "ISC",
   "readme": "README.md",

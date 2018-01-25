@@ -1,5 +1,6 @@
 const Helper = require("./Helper");
 const Promise = require("bluebird");
+const _ = require("lodash");
 
 class Options {
   constructor(type, way, num, place) {
@@ -33,8 +34,17 @@ class Options {
 module.exports = function(options) {
   // check type and way for allowed values
 
-  let type = options.hasOwnProperty("type") ? [options.type] : ["A", "D"];
-  let way = options.hasOwnProperty("way") ? [options.way] : ["I", "D"];
+  let allowedTypes = ["A", "D"];
+  let allowedWays = ["I", "D"];
+
+  let type =
+    options.hasOwnProperty("type") && _.includes(allowedTypes, options.type)
+      ? [options.type]
+      : allowedTypes;
+  let way =
+    options.hasOwnProperty("way") && _.includes(allowedWays, options.way)
+      ? [options.way]
+      : allowedWays;
   let num = options.hasOwnProperty("num") ? options.num : "";
   let place = options.hasOwnProperty("place") ? options.place : "";
 
